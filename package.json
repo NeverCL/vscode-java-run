@@ -1,9 +1,9 @@
 {
   "name": "java-run",
   "displayName": "java run",
-  "description": "",
-  "version": "0.0.1",
-  "publisher": "neverc",
+  "description": "一键编译运行Java代码,支持中文",
+  "version": "1.0.0",
+  "publisher": "caolin",
   "engines": {
     "vscode": "^1.5.0"
   },
