@@ -1,9 +1,9 @@
 {
-  "name": "java run",
+  "name": "java-run",
   "displayName": "java run",
   "description": "",
   "version": "0.0.1",
-  "publisher": "java run",
+  "publisher": "neverc",
   "engines": {
     "vscode": "^1.5.0"
   },
