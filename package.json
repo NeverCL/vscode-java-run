@@ -1,15 +1,24 @@
 {
   "name": "java-run",
-  "displayName": "java run",
-  "description": "一键编译运行Java代码,支持中文",
-  "version": "1.0.0",
+  "displayName": "Java Run",
+  "description": "一键编译运行Java代码",
+  "version": "1.0.1",
   "publisher": "caolin",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.5.0"
   },
   "categories": [
     "Other"
   ],
+  "bugs": {
+    "url": "https://github.com/NeverCL/vscode-java-run/issues"
+  },
+  "homepage": "https://github.com/NeverCL/vscode-java-run",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NeverCL/vscode-java-run.git"
+  },
   "activationEvents": [
     "onCommand:java.run"
   ],
