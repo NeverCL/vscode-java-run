@@ -64,6 +64,7 @@ export default class Compiler {
         let binaryEncoding = 'binary';
         exec(cmd, { encoding: binaryEncoding }, (err, stdout, stderr) => {
             if (stderr) {
+                this.info('生成失败!')
                 this.info(iconv.decode(new Buffer(stderr, binaryEncoding), encoding), true);
                 return;
             } else {
