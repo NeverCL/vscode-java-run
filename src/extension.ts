@@ -10,9 +10,8 @@ import * as vscode from "vscode";
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     let outputChannel = vscode.window.createOutputChannel("Java Run");
-    outputChannel.clear();
-    outputChannel.show();
     outputChannel.appendLine("\"Java.Run\" 已启动!\n 快捷键 alt+b 编译并运行");
+    outputChannel.show();
 
     let disposable = vscode.commands.registerCommand("java.run", () => {
         outputChannel.clear();
@@ -35,7 +34,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         let exec = require("child_process").exec;
         let cmd = "javac " + fullFileName;
-        outputChannel.appendLine("正在执行1: " + cmd);
+        // outputChannel.appendLine("正在执行: " + cmd);
+        outputChannel.appendLine("正在编译...");
 
         let runFunc = () => {
             let isUnixLike = fullFileName.startsWith("/");
@@ -44,7 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
             let folderPath = fullFileName.substring(0, fileNameIndex);// c://tmp
             let className = fileName.substring(0, fileName.indexOf(".java"));
             cmd = "java -cp " + folderPath + " " + className;
-            outputChannel.appendLine("正在执行2: " + cmd);
+            // outputChannel.appendLine("正在执行: " + cmd);
+            outputChannel.appendLine("开始运行");
             exec(cmd, function (error, stdout, stderr) {
                 if (stderr) {
                     outputChannel.appendLine(stderr);
@@ -61,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
         let binaryEncoding = 'binary';
 
         exec(cmd, { encoding: binaryEncoding }, function (err, stdout, stderr) {
-             if (stderr) {
+            if (stderr) {
                 outputChannel.appendLine(iconv.decode(new Buffer(stderr, binaryEncoding), encoding));
                 return;
             } else {
