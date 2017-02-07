@@ -71,17 +71,17 @@ export default class Compiler {
     private build(fullFileName) {
         let exec = require("child_process").exec;
         let cmd = "javac -d " + this.fileInfo.folderPath + " " + fullFileName;
-        this.info('正在生成...');
+        this.info('已启动生成...');
         let iconv = require('iconv-lite');// 中文转码处理
         let encoding = 'cp936';// 类似gb2312
         let binaryEncoding = 'binary';
         exec(cmd, { encoding: binaryEncoding }, (err, stdout, stderr) => {
             if (stderr) {
-                this.info('生成失败!')
+                this.info('生成失败');
                 this.info(iconv.decode(new Buffer(stderr, binaryEncoding), encoding), true);
                 return;
             } else {
-                // this.info('生成成功!')
+                this.info('生成成功');
                 this.run(exec, fullFileName);
             }
         });
