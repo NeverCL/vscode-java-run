@@ -2,7 +2,7 @@
   "name": "java-run",
   "displayName": "Java Run",
   "description": "一键编译运行Java代码",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "caolin",
   "icon": "images/icon.png",
   "engines": {
