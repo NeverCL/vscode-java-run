@@ -2,20 +2,28 @@
  * Java 编译器
  * 
  * @author Never、C
- * @version 1.0
+ * @version 1.1.1
+ * 
+ * 1. 增加包名 编译
+ * 2. 增加包名 运行
  */
+// tslint:disable:typedef
+// tslint:disable:quotemark
+
+import FileInfo from './FileInfo';
 
 export default class Compiler {
     private vscode;
     private outputChannel;
     private statusBar;
+    private fileInfo: FileInfo;
 
     constructor(_vscode) {
         this.vscode = _vscode;
         this.init();
     }
 
-    //初始化
+    // 初始化
     private init() {
         this.outputChannel = this.vscode.window.createOutputChannel("Java Run");
         this.outputChannel.appendLine("\"Java.Run\" 已启动!\n 快捷键 alt+b 编译并运行");
@@ -25,21 +33,25 @@ export default class Compiler {
         this.statusBar.show();
     }
 
-    //启动
+    // 启动
     start() {
+        this.fileInfo = new FileInfo(this.vscode.window.activeTextEditor.document);
         this.prebuild(this.vscode.window.activeTextEditor);
     }
 
-    private info(info, isOutput = false) {
-        if (isOutput)
+    // 提示
+    private info(info, isOutput: boolean = false) {
+        if (isOutput) {
             this.outputChannel.appendLine(info);
-        else
+        } else {
             this.statusBar.text = info;
+        }
     }
 
+    // 预编译
     private prebuild(editor) {
         this.outputChannel.clear();
-        let fullFileName = editor.document.fileName;
+        let fullFileName = this.fileInfo.fullFileName;
         if (!editor || !fullFileName) {
             return;
         }
@@ -55,9 +67,10 @@ export default class Compiler {
         this.build(fullFileName);
     }
 
+    // 编译
     private build(fullFileName) {
         let exec = require("child_process").exec;
-        let cmd = "javac " + fullFileName;
+        let cmd = "javac -d " + this.fileInfo.folderPath + " " + fullFileName;
         this.info('正在生成...');
         let iconv = require('iconv-lite');// 中文转码处理
         let encoding = 'cp936';// 类似gb2312
@@ -68,19 +81,16 @@ export default class Compiler {
                 this.info(iconv.decode(new Buffer(stderr, binaryEncoding), encoding), true);
                 return;
             } else {
-                this.info('生成成功!')
+                // this.info('生成成功!')
                 this.run(exec, fullFileName);
             }
         });
     }
 
+    // 运行
     private run(exec, fullFileName) {
-        let isUnixLike = fullFileName.startsWith("/");
-        let fileNameIndex = isUnixLike ? fullFileName.lastIndexOf("/") : fullFileName.lastIndexOf("\\");
-        let fileName = fullFileName.substring(fileNameIndex + 1);
-        let folderPath = fullFileName.substring(0, fileNameIndex);// c://tmp
-        let className = fileName.substring(0, fileName.indexOf(".java"));
-        let cmd = "java -cp " + folderPath + " " + className;
+        let cmd = "java -cp " + this.fileInfo.folderPath + " " +
+            (this.fileInfo.packageName ? this.fileInfo.packageName + "." + this.fileInfo.className : this.fileInfo.className);
         exec(cmd, (error, stdout, stderr) => {
             if (stderr) {
                 this.info(stderr, true);
@@ -90,7 +100,7 @@ export default class Compiler {
         });
     }
 
-    dispose() {  //实现dispose方法
+    dispose() {  // 实现dispose方法
         this.statusBar.dispose();
     }
 }
