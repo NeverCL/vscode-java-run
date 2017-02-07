@@ -28,7 +28,7 @@ export default class FileInfo {
         let className = fileName.substring(0, fileName.indexOf(".java"));
 
         let rst = /package (.+)?;/.exec(text);
-        if (rst.length === 2) {
+        if (rst && rst.length === 2) {
             this.packageName = rst[1];
         }
 
